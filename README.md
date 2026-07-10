@@ -1,1 +1,3 @@
 # syncept
+SynCept was conceived, designed and directed by the author, drawing on her direct experience as a biology student and tutor. The platform addresses a problem she observed repeatedly in her own practice: students who could pass multiple choice tests without genuinely understanding the material they were being tested on.
+AI coding tools were used to implement and iterate on the technical codebase throughout development. All product decisions, the core pedagogical concept, the feature set, the user experience design, and the problem framing came from the creator. Claude AI was used to develop the code necessary to power this platform. The idea, the insight behind it, and the judgment calls that shaped the product are entirely the author's creation.
