@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Master Explainer</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#ffffff; --bg-2:#f5f4f2; --bg-3:#eeecea;
+      --text:#1a1917; --text-2:#6b6860; --text-3:#a09e99;
+      --border:rgba(26,25,23,0.12); --border-2:rgba(26,25,23,0.22);
+      --purple-50:#EEEDFE; --purple-200:#AFA9EC; --purple-600:#534AB7;
+      --purple-800:#3C3489; --purple-900:#26215C;
+      --teal-50:#E1F5EE; --teal-600:#0F6E56; --teal-800:#085041;
+      --green-50:#EAF3DE; --green-200:#C0DD97; --green-600:#3B6D11; --green-800:#27500A;
+      --amber-50:#FAEEDA; --amber-400:#EF9F27; --amber-600:#854F0B; --amber-800:#633806;
+      --red-50:#FCEBEB; --red-200:#F09595; --red-600:#A32D2D; --red-800:#791F1F;
+      --coral-50:#FAECE7; --coral-600:#993C1D;
+      --radius-md:8px; --radius-lg:12px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:#1a1917; --bg-2:#242320; --bg-3:#2c2c2a;
+        --text:#f0ede8; --text-2:#a09e99; --text-3:#6b6860;
+        --border:rgba(240,237,232,0.1); --border-2:rgba(240,237,232,0.2);
+      }
+    }
+    html,body { min-height:100%; background:var(--bg-3); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--text); font-size:16px; line-height:1.6; }
+    .shell { min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:2rem 1rem 4rem; }
+    .container { width:100%; max-width:660px; }
+    .screen { display:none; } .screen.active { display:block; }
+    .card { background:var(--bg); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:1.25rem; margin-bottom:1rem; }
+    .badge { display:inline-flex; align-items:center; gap:4px; font-size:12px; padding:3px 10px; border-radius:20px; font-weight:500; }
+    .badge-purple { background:var(--purple-50); color:var(--purple-800); }
+    .badge-green  { background:var(--green-50);  color:var(--green-800); }
+    .badge-amber  { background:var(--amber-50);  color:var(--amber-800); }
+    .badge-red    { background:var(--red-50);    color:var(--red-800); }
+    .badge-teal   { background:var(--teal-50);   color:var(--teal-800); }
+    .btn { display:inline-flex; align-items:center; gap:6px; font-family:inherit; font-size:14px; font-weight:500; cursor:pointer; border-radius:var(--radius-md); padding:9px 18px; transition:background 0.15s,opacity 0.15s; border:none; }
+    .btn:disabled { opacity:0.45; cursor:not-allowed; }
+    .btn-primary { background:var(--purple-600); color:#fff; }
+    .btn-primary:hover:not(:disabled) { background:var(--purple-800); }
+    .btn-ghost { background:transparent; color:var(--text-2); border:0.5px solid var(--border-2); }
+    .btn-ghost:hover:not(:disabled) { background:var(--bg-2); }
+    .btn-danger { background:var(--red-50); color:var(--red-800); border:0.5px solid var(--red-200); }
+    .btn-sm { padding:6px 12px; font-size:13px; }
+    .btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-top:1rem; }
+    label { display:block; font-size:13px; font-weight:500; color:var(--text-2); margin-bottom:5px; }
+    input[type=text],input[type=number],select,textarea {
+      width:100%; font-family:inherit; font-size:14px; color:var(--text);
+      background:var(--bg-2); border:0.5px solid var(--border-2);
+      border-radius:var(--radius-md); padding:8px 12px;
+      transition:border-color 0.15s,box-shadow 0.15s;
+    }
+    input[type=text],input[type=number],select { height:38px; }
+    textarea { min-height:100px; resize:vertical; line-height:1.6; }
+    input:focus,select:focus,textarea:focus { outline:none; border-color:var(--purple-600); box-shadow:0 0 0 3px rgba(83,74,183,0.12); }
+    input[type=number] { width:72px; text-align:center; }
+    .field { margin-bottom:1rem; } .field:last-child { margin-bottom:0; }
+    .toggle-wrap { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:0.5px solid var(--border); }
+    .toggle-wrap:last-child { border-bottom:none; }
+    .toggle-title { font-size:14px; color:var(--text); }
+    .toggle-desc  { font-size:12px; color:var(--text-2); margin-top:2px; }
+    .toggle { position:relative; display:inline-block; width:40px; height:22px; flex-shrink:0; }
+    .toggle input { opacity:0; width:0; height:0; }
+    .toggle-track { position:absolute; inset:0; background:var(--border-2); border-radius:22px; transition:background 0.2s; cursor:pointer; }
+    .toggle input:checked + .toggle-track { background:var(--purple-600); }
+    .toggle-thumb { position:absolute; width:16px; height:16px; background:#fff; border-radius:50%; top:3px; left:3px; transition:transform 0.2s; pointer-events:none; }
+    .toggle input:checked ~ .toggle-thumb { transform:translateX(18px); }
+    .tab-row { display:flex; gap:2px; background:var(--bg-2); border-radius:var(--radius-md); padding:3px; margin-bottom:1.25rem; }
+    .tab { flex:1; text-align:center; padding:8px 12px; font-size:13px; cursor:pointer; border-radius:6px; color:var(--text-2); transition:all 0.15s; user-select:none; }
+    .tab.active { background:var(--bg); color:var(--text); font-weight:500; border:0.5px solid var(--border); }
+    .progress-wrap { background:var(--bg-2); border-radius:4px; height:5px; overflow:hidden; margin-bottom:1rem; }
+    .progress-fill { height:100%; background:var(--purple-600); border-radius:4px; transition:width 0.4s ease; }
+    .metric-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:1.25rem; }
+    .metric-card { background:var(--bg-2); border-radius:var(--radius-md); padding:1rem; text-align:center; }
+    .metric-val   { font-size:22px; font-weight:500; color:var(--text); }
+    .metric-label { font-size:12px; color:var(--text-2); margin-top:2px; }
+    .module-item { display:flex; align-items:center; gap:12px; padding:12px; border:0.5px solid var(--border); border-radius:var(--radius-md); margin-bottom:8px; cursor:pointer; transition:background 0.1s; }
+    .module-item.clickable:hover { background:var(--bg-2); }
+    .module-item.locked { opacity:0.48; cursor:not-allowed; }
+    .module-item.passed { border-color:var(--green-200); }
+    .module-item.active-mod { border-color:var(--purple-200); background:var(--purple-50); }
+    .module-item.flagged { border-color:var(--red-200); }
+    .mod-icon { width:36px; height:36px; border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+    .ic-done    { background:var(--green-50);  color:var(--green-800); }
+    .ic-lock    { background:var(--bg-2);       color:var(--text-3); }
+    .ic-active  { background:var(--purple-50); color:var(--purple-600); }
+    .ic-flagged { background:var(--red-50);    color:var(--red-800); }
+    .ic-pending { background:var(--amber-50);  color:var(--amber-800); }
+    .mod-title  { font-size:14px; font-weight:500; color:var(--text); }
+    .mod-sub    { font-size:12px; color:var(--text-2); margin-top:2px; }
+    .pip { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:3px; }
+    .pip.pass { background:var(--green-600); } .pip.fail { background:var(--red-600); }
+    .mode-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:1rem; }
+    .mode-btn { display:flex; flex-direction:column; align-items:center; gap:6px; padding:14px 8px; border:0.5px solid var(--border-2); border-radius:var(--radius-md); cursor:pointer; color:var(--text-2); background:var(--bg); font-family:inherit; transition:all 0.15s; }
+    .mode-btn i { font-size:22px; }
+    .mode-btn span { font-size:12px; font-weight:500; }
+    .mode-btn:hover { border-color:var(--purple-200); color:var(--purple-600); background:var(--purple-50); }
+    .mode-btn.selected { border-color:var(--purple-600); color:var(--purple-600); background:var(--purple-50); }
+    .rec-area { background:var(--bg-2); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:2rem 1rem; text-align:center; margin-bottom:1rem; display:flex; flex-direction:column; align-items:center; gap:12px; min-height:180px; justify-content:center; }
+    .rec-dot { width:14px; height:14px; border-radius:50%; background:#E24B4A; animation:pulse-rec 1.2s infinite; }
+    @keyframes pulse-rec { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.85)} }
+    .rec-hint { font-size:14px; color:var(--text-2); }
+    .video-frame { width:100%; max-width:280px; aspect-ratio:16/9; background:#1a1917; border-radius:var(--radius-md); overflow:hidden; display:flex; align-items:center; justify-content:center; color:var(--text-3); font-size:12px; }
+    .video-frame video { width:100%; height:100%; object-fit:cover; }
+    .question-card { background:var(--purple-50); border:0.5px solid var(--purple-200); border-radius:var(--radius-lg); padding:1.25rem; margin-bottom:1rem; }
+    .question-eyebrow { font-size:11px; font-weight:500; color:var(--purple-600); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:8px; }
+    .question-text { font-size:16px; font-weight:500; color:var(--purple-900); line-height:1.6; }
+    .transcript-box-wrap { background:var(--bg-2); border:0.5px solid var(--border); border-radius:var(--radius-md); padding:12px; margin-bottom:1rem; font-size:14px; color:var(--text-2); line-height:1.6; font-style:italic; }
+    .transcript-label { font-size:11px; font-weight:500; color:var(--text-3); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:5px; display:block; font-style:normal; }
+    .score-ring { width:76px; height:76px; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; border:2px solid; flex-shrink:0; }
+    .score-ring.pass { background:var(--green-50); border-color:var(--green-200); }
+    .score-ring.fail { background:var(--red-50);   border-color:var(--red-200); }
+    .score-num { font-size:22px; font-weight:500; }
+    .score-ring.pass .score-num { color:var(--green-800); }
+    .score-ring.fail .score-num { color:var(--red-800); }
+    .score-denom { font-size:10px; color:var(--text-3); }
+    .fb { border-radius:var(--radius-md); padding:12px 14px; margin-bottom:8px; font-size:14px; line-height:1.7; }
+    .fb-title { font-size:12px; font-weight:500; margin-bottom:6px; }
+    .fb ul { padding-left:1.2em; } .fb li { margin-bottom:3px; }
+    .fb.strengths { background:var(--green-50); color:var(--green-800); }
+    .fb.strengths .fb-title { color:var(--green-600); }
+    .fb.gaps      { background:var(--red-50);   color:var(--red-800); }
+    .fb.gaps .fb-title { color:var(--red-600); }
+    .fb.tip       { background:var(--purple-50); color:var(--purple-800); }
+    .fb.tip .fb-title { color:var(--purple-600); }
+    .fb.oral      { background:var(--teal-50); color:var(--teal-800); }
+    .fb.oral .fb-title { color:var(--teal-600); }
+    .gate { border-radius:var(--radius-lg); padding:1.25rem; text-align:center; margin-top:1rem; border:2px solid; }
+    .gate i { font-size:26px; display:block; margin-bottom:8px; }
+    .gate-title { font-size:15px; font-weight:500; margin-bottom:4px; }
+    .gate-desc  { font-size:13px; line-height:1.6; }
+    .gate.unlock  { background:var(--green-50);  border-color:var(--green-200);  color:var(--green-800); }
+    .gate.locked  { background:var(--red-50);    border-color:var(--red-200);    color:var(--red-800); }
+    .gate.pending { background:var(--amber-50);  border-color:var(--amber-400);  color:var(--amber-800); }
+    .gate.flagged { background:var(--coral-50);  border-color:var(--red-200);    color:var(--coral-600); }
+    .dots { display:inline-flex; gap:4px; align-items:center; }
+    .dots span { width:6px; height:6px; border-radius:50%; background:var(--purple-600); animation:blink 1.2s infinite; }
+    .dots span:nth-child(2) { animation-delay:0.2s; }
+    .dots span:nth-child(3) { animation-delay:0.4s; }
+    @keyframes blink { 0%,100%{opacity:0.25} 50%{opacity:1} }
+    .loading-state { text-align:center; padding:2.5rem 0; }
+    .loading-msg { font-size:14px; color:var(--text-2); margin-top:12px; }
+    .header { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.5rem; }
+    .page-title { font-size:22px; font-weight:500; margin:8px 0 4px; }
+    .page-sub   { font-size:14px; color:var(--text-2); margin-bottom:1.25rem; line-height:1.6; }
+    .divider { border:none; border-top:0.5px solid var(--border); margin:1rem 0; }
+    .word-count { font-size:12px; color:var(--text-3); text-align:right; margin-top:4px; }
+    .api-notice { background:var(--amber-50); border:0.5px solid var(--amber-400); border-radius:var(--radius-md); padding:12px 14px; font-size:13px; color:var(--amber-800); margin-top:10px; line-height:1.6; }
+    .api-notice a { color:var(--amber-600); font-weight:500; }
+    code { font-family:monospace; font-size:0.9em; background:var(--bg-3); padding:1px 4px; border-radius:3px; }
+    .gemini-badge { display:inline-flex; align-items:center; gap:5px; font-size:12px; color:var(--teal-600); background:var(--teal-50); border-radius:20px; padding:3px 10px; margin-bottom:1rem; }
+  </style>
+</head>
+<body>
+<div class="shell">
+<div class="container">
+
+  <!-- ── HOME ── -->
+  <div id="s-home" class="screen active">
+    <div style="margin-bottom:1.5rem">
+      <span class="badge badge-purple"><i class="ti ti-microphone"></i> Master Explainer</span>
+      <h1 class="page-title">You don't know it until you can explain it.</h1>
+      <p class="page-sub">Speak, record, or write through each concept. Unlock the next module only when the AI — or your teacher — is convinced you genuinely understand it.</p>
+      <span class="gemini-badge"><i class="ti ti-sparkles"></i> Powered by Google Gemini (free tier)</span>
+    </div>
+
+    <!-- API Key -->
+    <div class="card">
+      <label>Google Gemini API key</label>
+      <div style="display:flex;gap:8px">
+        <input type="text" id="api-key" placeholder="AIza..." style="font-family:monospace;flex:1" />
+        <button class="btn btn-ghost btn-sm" onclick="saveKey()"><i class="ti ti-check"></i> Save</button>
+      </div>
+      <div class="api-notice">
+        <strong>Free to use.</strong> Get your free key at
+        <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com/app/apikey</a>
+        — no billing setup needed. Free tier gives ~1,500 requests/day.
+        Your key is stored only in your browser's <code>localStorage</code>.
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tab-row">
+      <div class="tab active" id="tab-student" onclick="switchTab('student')"><i class="ti ti-user" style="font-size:14px"></i> Student</div>
+      <div class="tab" id="tab-teacher" onclick="switchTab('teacher')"><i class="ti ti-school" style="font-size:14px"></i> Teacher / proctor</div>
+    </div>
+
+    <!-- Student pane -->
+    <div id="pane-student">
+      <div class="card">
+        <div class="field"><label>Your name</label><input type="text" id="student-name" placeholder="e.g. Jordan" /></div>
+        <div class="field"><label>Course or topic area</label><input type="text" id="course-name" placeholder="e.g. A-level Biology, GCSE History, Machine Learning..." /></div>
+        <div class="field" style="margin-bottom:0">
+          <label>Paste your notes or syllabus <span style="font-weight:400;color:var(--text-3)">(optional — helps the AI ask better questions)</span></label>
+          <textarea id="course-notes" placeholder="Paste lecture notes, a textbook excerpt, or learning objectives..."></textarea>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="startStudentSession()"><i class="ti ti-player-play"></i> Enter my course</button>
+    </div>
+
+    <!-- Teacher pane -->
+    <div id="pane-teacher" style="display:none">
+      <div class="card">
+        <div class="field"><label>Teacher name</label><input type="text" id="teacher-name" placeholder="e.g. Ms. Okafor" /></div>
+        <div class="field"><label>Course name</label><input type="text" id="t-course-name" placeholder="e.g. Year 12 Chemistry" /></div>
+        <div class="field" style="margin-bottom:0">
+          <label>Course notes / syllabus</label>
+          <textarea id="t-course-notes" placeholder="Paste the syllabus or topic list here..."></textarea>
+        </div>
+        <hr class="divider" />
+        <div style="font-size:13px;font-weight:500;margin-bottom:10px">Unlock settings</div>
+        <div class="toggle-wrap">
+          <div><div class="toggle-title">Score threshold</div><div class="toggle-desc">Students auto-unlock at or above this score</div></div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <input type="number" id="threshold-input" value="75" min="0" max="100" style="width:64px" />
+            <span style="font-size:13px;color:var(--text-2)">/100</span>
+          </div>
+        </div>
+        <div class="toggle-wrap">
+          <div><div class="toggle-title">Require teacher approval</div><div class="toggle-desc">AI pre-screens; you confirm borderline passes</div></div>
+          <label class="toggle"><input type="checkbox" id="teacher-approval-toggle" checked /><span class="toggle-track"></span><span class="toggle-thumb"></span></label>
+        </div>
+        <div class="toggle-wrap">
+          <div><div class="toggle-title">Max attempts per module</div><div class="toggle-desc">Student is flagged for review after this many failures</div></div>
+          <select id="max-attempts" style="width:auto">
+            <option value="2">2</option><option value="3" selected>3</option><option value="5">5</option><option value="0">Unlimited</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="startTeacherSession()"><i class="ti ti-settings"></i> Set up course</button>
+    </div>
+  </div>
+
+  <!-- ── COURSE ── -->
+  <div id="s-course" class="screen">
+    <div class="header">
+      <span class="badge badge-purple" id="course-badge">Course</span>
+      <button class="btn btn-ghost btn-sm" onclick="showHome()"><i class="ti ti-arrow-left"></i> Home</button>
+    </div>
+    <h1 class="page-title" id="course-title">Your modules</h1>
+    <p class="page-sub" id="course-sub"></p>
+    <div class="progress-wrap"><div class="progress-fill" id="course-progress" style="width:0%"></div></div>
+    <div class="metric-grid">
+      <div class="metric-card"><div class="metric-val" id="stat-done">0</div><div class="metric-label">Passed</div></div>
+      <div class="metric-card"><div class="metric-val" id="stat-total">0</div><div class="metric-label">Modules</div></div>
+      <div class="metric-card"><div class="metric-val" id="stat-avg">—</div><div class="metric-label">Avg score</div></div>
+    </div>
+    <div id="modules-list"></div>
+    <div style="margin-top:0.75rem">
+      <button class="btn btn-ghost btn-sm" onclick="promptAddModule()"><i class="ti ti-plus"></i> Add module</button>
+    </div>
+  </div>
+
+  <!-- ── EXAM ── -->
+  <div id="s-exam" class="screen">
+    <div class="header">
+      <div>
+        <span class="badge badge-purple" id="exam-badge">Module</span>
+        <div style="font-size:12px;color:var(--text-2);margin-top:4px" id="exam-attempt-info">Attempt 1</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="exitExam()"><i class="ti ti-x"></i> Exit</button>
+    </div>
+
+    <!-- Input area -->
+    <div id="exam-input-area">
+      <div class="question-card">
+        <div class="question-eyebrow"><i class="ti ti-message-question"></i> Explain this concept</div>
+        <div class="question-text" id="exam-question">Loading...</div>
+      </div>
+
+      <div style="margin-bottom:1rem">
+        <div style="font-size:13px;font-weight:500;color:var(--text-2);margin-bottom:8px">How do you want to answer?</div>
+        <div class="mode-grid">
+          <button class="mode-btn selected" id="mode-voice" onclick="selectMode('voice')"><i class="ti ti-microphone"></i><span>Voice only</span></button>
+          <button class="mode-btn" id="mode-video" onclick="selectMode('video')"><i class="ti ti-video"></i><span>Video + voice</span></button>
+          <button class="mode-btn" id="mode-type" onclick="selectMode('type')"><i class="ti ti-keyboard"></i><span>Type it</span></button>
+        </div>
+      </div>
+
+      <!-- Voice -->
+      <div id="panel-voice">
+        <div class="rec-area">
+          <div id="voice-idle" style="display:flex;flex-direction:column;align-items:center;gap:10px">
+            <i class="ti ti-microphone" style="font-size:32px;color:var(--text-3)"></i>
+            <p class="rec-hint">Press record and explain the concept out loud — as if teaching a classmate.</p>
+            <button class="btn btn-primary" onclick="startAudioRec()"><i class="ti ti-microphone"></i> Start recording</button>
+          </div>
+          <div id="voice-active" style="display:none;flex-direction:column;align-items:center;gap:10px">
+            <div class="rec-dot"></div>
+            <div style="font-size:14px;font-weight:500">Recording...</div>
+            <div style="font-size:13px;color:var(--text-2)" id="audio-timer">0:00</div>
+            <button class="btn btn-danger btn-sm" onclick="stopAudioRec()"><i class="ti ti-player-stop"></i> Stop</button>
+          </div>
+          <div id="voice-done" style="display:none;flex-direction:column;align-items:center;gap:10px">
+            <i class="ti ti-circle-check" style="font-size:28px;color:var(--green-600)"></i>
+            <div style="font-size:14px;color:var(--text-2)" id="audio-done-label">Recorded 0:00</div>
+            <button class="btn btn-ghost btn-sm" onclick="reRecordAudio()"><i class="ti ti-refresh"></i> Re-record</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div id="panel-video" style="display:none">
+        <div class="rec-area">
+          <div id="video-idle" style="display:flex;flex-direction:column;align-items:center;gap:10px">
+            <div class="video-frame" style="margin-bottom:2px"><span>Camera off</span></div>
+            <button class="btn btn-primary" onclick="startVideoRec()"><i class="ti ti-video"></i> Start camera &amp; record</button>
+          </div>
+          <div id="video-active" style="display:none;flex-direction:column;align-items:center;gap:10px">
+            <div class="video-frame"><video id="vid-el" autoplay muted playsinline style="width:100%;height:100%;object-fit:cover"></video></div>
+            <div style="display:flex;align-items:center;gap:8px"><div class="rec-dot"></div><span style="font-size:14px;font-weight:500">Recording</span><span style="font-size:13px;color:var(--text-2)" id="video-timer">0:00</span></div>
+            <button class="btn btn-danger btn-sm" onclick="stopVideoRec()"><i class="ti ti-player-stop"></i> Stop</button>
+          </div>
+          <div id="video-done" style="display:none;flex-direction:column;align-items:center;gap:10px">
+            <i class="ti ti-circle-check" style="font-size:28px;color:var(--green-600)"></i>
+            <div style="font-size:14px;color:var(--text-2)" id="video-done-label">Video recorded</div>
+            <button class="btn btn-ghost btn-sm" onclick="reRecordVideo()"><i class="ti ti-refresh"></i> Re-record</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Type -->
+      <div id="panel-type" style="display:none">
+        <label>Your explanation</label>
+        <textarea id="typed-answer" placeholder="Explain in your own words — as if teaching a peer. Don't look at your notes." style="min-height:140px"></textarea>
+        <div class="word-count"><span id="word-count">0</span> words</div>
+      </div>
+
+      <!-- Transcript preview -->
+      <div id="transcript-box" style="display:none;margin-top:0.75rem">
+        <div class="transcript-box-wrap">
+          <span class="transcript-label">What the AI will evaluate</span>
+          <span id="transcript-text"></span>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="submit-btn" onclick="submitAnswer()"><i class="ti ti-check"></i> Submit for evaluation</button>
+        <button class="btn btn-ghost" onclick="exitExam()">Cancel</button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div id="exam-loading" style="display:none">
+      <div class="loading-state">
+        <div class="dots"><span></span><span></span><span></span></div>
+        <div class="loading-msg" id="loading-msg">The AI examiner is evaluating your explanation...</div>
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div id="exam-result" style="display:none">
+      <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:1rem">
+        <div class="score-ring fail" id="result-ring">
+          <span class="score-num" id="result-score">—</span>
+          <span class="score-denom">/100</span>
+        </div>
+        <div>
+          <div style="font-size:16px;font-weight:500" id="result-title">Assessment complete</div>
+          <div style="font-size:13px;color:var(--text-2);margin-top:3px" id="result-summary"></div>
+          <div style="margin-top:8px;display:flex;align-items:center;gap:4px;flex-wrap:wrap" id="result-pips"></div>
+        </div>
+      </div>
+      <div class="fb strengths" id="fb-strengths" style="display:none"></div>
+      <div class="fb gaps"      id="fb-gaps"      style="display:none"></div>
+      <div class="fb tip"       id="fb-tip"       style="display:none"></div>
+      <div class="fb oral"      id="fb-oral"      style="display:none"></div>
+      <div id="gate-area"></div>
+      <div class="btn-row" id="result-actions"></div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+</div><!-- /shell -->
+
+<script>
+/* ─────────────────────────────────────────
+   STATE
+───────────────────────────────────────── */
+const APP = {
+  apiKey: '',
+  mode: 'student',
+  studentName: '', courseName: '', courseNotes: '',
+  teacherName: '', threshold: 75, teacherApproval: true, maxAttempts: 3,
+  modules: [], currentModIdx: 0, inputMode: 'voice',
+  mediaRecorder: null, audioChunks: [], recInterval: null, recSeconds: 0,
+  videoStream: null, videoRecorder: null, videoChunks: [], vidSeconds: 0,
+  currentTranscript: '', currentQuestion: '',
+  speechTranscript: '', recognition: null,
+};
+
+// Gemini endpoint — free tier, no billing required
+const GEMINI_MODEL = 'gemini-2.0-flash';
+const geminiUrl = () =>
+  `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${APP.apiKey}`;
+
+const $ = id => document.getElementById(id);
+const fmtTime = s => Math.floor(s / 60) + ':' + (s % 60 < 10 ? '0' : '') + (s % 60);
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  $(id).classList.add('active');
+}
+const showHome   = () => showScreen('s-home');
+const showCourse = () => showScreen('s-course');
+const showExam   = () => showScreen('s-exam');
+
+/* ─────────────────────────────────────────
+   API KEY
+───────────────────────────────────────── */
+function saveKey() {
+  const k = $('api-key').value.trim();
+  if (!k) { alert('Please paste your Gemini API key first.'); return; }
+  APP.apiKey = k;
+  localStorage.setItem('me_gemini_key', k);
+  $('api-key').value = k.slice(0, 8) + '••••••••••••';
+  alert('Gemini API key saved!');
+}
+function loadKey() {
+  const k = localStorage.getItem('me_gemini_key');
+  if (k) { APP.apiKey = k; $('api-key').value = k.slice(0, 8) + '••••••••••••'; }
+}
+
+/* ─────────────────────────────────────────
+   GEMINI API CALL
+───────────────────────────────────────── */
+async function callGemini(systemPrompt, userContent, opts = {}) {
+  if (!APP.apiKey) throw new Error('No API key set.');
+  const genConfig = {
+    temperature: opts.temperature ?? 0.4,
+    maxOutputTokens: opts.maxTokens ?? 1024,
+  };
+  // JSON mode forces Gemini to return valid JSON — cannot be combined with search grounding
+  if (opts.jsonMode) genConfig.responseMimeType = 'application/json';
+
+  const body = {
+    system_instruction: { parts: [{ text: systemPrompt }] },
+    contents: [{ role: 'user', parts: [{ text: userContent }] }],
+    generationConfig: genConfig,
+  };
+  if (opts.tools) body.tools = opts.tools;
+
+  const res = await fetch(geminiUrl(), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || 'Gemini API error ' + res.status);
+  }
+  const data = await res.json();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+}
+
+/* ─────────────────────────────────────────
+   ROBUST JSON EXTRACTION
+───────────────────────────────────────── */
+function extractJSON(raw) {
+  if (!raw || !raw.trim()) throw new Error('Empty response from Gemini');
+  // 1. Direct parse
+  try { return JSON.parse(raw); } catch {}
+  // 2. Strip markdown fences
+  const clean = raw.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+  try { return JSON.parse(clean); } catch {}
+  // 3. Extract first {...} block (handles extra text before/after JSON)
+  const match = clean.match(/\{[\s\S]*\}/);
+  if (match) { try { return JSON.parse(match[0]); } catch {} }
+  throw new Error('Could not parse JSON from Gemini response: ' + raw.slice(0, 120));
+}
+
+/* ─────────────────────────────────────────
+   TABS
+───────────────────────────────────────── */
+function switchTab(t) {
+  APP.mode = t;
+  $('tab-student').className = 'tab' + (t === 'student' ? ' active' : '');
+  $('tab-teacher').className = 'tab' + (t === 'teacher' ? ' active' : '');
+  $('pane-student').style.display = t === 'student' ? 'block' : 'none';
+  $('pane-teacher').style.display = t === 'teacher' ? 'block' : 'none';
+}
+
+/* ─────────────────────────────────────────
+   DEFAULT MODULES
+───────────────────────────────────────── */
+function defaultModules(topic) {
+  const tp = topic.toLowerCase();
+  let titles;
+  if (tp.includes('bio') || tp.includes('cell') || tp.includes('phot') || tp.includes('evol'))
+    titles = ['Cell structure & organelles', 'Photosynthesis', 'Cellular respiration', 'DNA & protein synthesis', 'Evolution & natural selection'];
+  else if (tp.includes('hist') || tp.includes('war') || tp.includes('revolution'))
+    titles = ['Causes of WWI', 'The Treaty of Versailles', 'Rise of totalitarianism', 'WWII key events & turning points', 'Cold War origins'];
+  else if (tp.includes('chem') || tp.includes('acid') || tp.includes('periodic'))
+    titles = ['Atomic structure', 'Chemical bonding', 'Periodic table trends', 'Acids, bases & reactions', 'Organic chemistry basics'];
+  else if (tp.includes('math') || tp.includes('calc') || tp.includes('algebra'))
+    titles = ['Foundations & notation', 'Core theorems', 'Techniques & methods', 'Applied problem-solving', 'Common pitfalls & edge cases'];
+  else
+    titles = [
+      topic + ': Introduction & key concepts',
+      topic + ': Core mechanisms',
+      topic + ': Applications & examples',
+      topic + ': Common misconceptions',
+      topic + ': Synthesis & connections',
+    ];
+  return titles.map((title, i) => ({
+    title, status: i === 0 ? 'available' : 'locked',
+    attempts: 0, scores: [], bestScore: 0, pendingApproval: false,
+  }));
+}
+
+/* ─────────────────────────────────────────
+   SESSION START
+───────────────────────────────────────── */
+function startStudentSession() {
+  if (!APP.apiKey) { alert('Please enter and save your Gemini API key first.'); return; }
+  APP.studentName = $('student-name').value.trim() || 'Student';
+  APP.courseName  = $('course-name').value.trim()  || 'My Course';
+  APP.courseNotes = $('course-notes').value.trim();
+  APP.threshold = 75; APP.teacherApproval = false; APP.maxAttempts = 3;
+  APP.modules = defaultModules(APP.courseName);
+  renderCourseScreen(); showCourse();
+}
+
+function startTeacherSession() {
+  if (!APP.apiKey) { alert('Please enter and save your Gemini API key first.'); return; }
+  APP.teacherName  = $('teacher-name').value.trim()  || 'Teacher';
+  APP.courseName   = $('t-course-name').value.trim() || 'Course';
+  APP.courseNotes  = $('t-course-notes').value.trim();
+  APP.studentName  = 'Student';
+  APP.threshold       = parseInt($('threshold-input').value) || 75;
+  APP.teacherApproval = $('teacher-approval-toggle').checked;
+  APP.maxAttempts     = parseInt($('max-attempts').value) || 3;
+  APP.modules = defaultModules(APP.courseName);
+  renderCourseScreen(); showCourse();
+}
+
+/* ─────────────────────────────────────────
+   COURSE SCREEN
+───────────────────────────────────────── */
+function renderCourseScreen() {
+  $('course-badge').textContent = APP.mode === 'teacher'
+    ? APP.teacherName + ' — ' + APP.courseName
+    : APP.studentName;
+  $('course-title').textContent = APP.courseName;
+  $('course-sub').textContent = 'Hello ' + (APP.mode === 'teacher' ? APP.teacherName : APP.studentName) + '! Complete each module to unlock the next.';
+  updateStats(); renderModules();
+}
+
+function updateStats() {
+  const passed = APP.modules.filter(m => m.status === 'passed').length;
+  const total  = APP.modules.length;
+  const scores = APP.modules.filter(m => m.bestScore > 0).map(m => m.bestScore);
+  const avg    = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : null;
+  $('stat-done').textContent  = passed;
+  $('stat-total').textContent = total;
+  $('stat-avg').textContent   = avg ? avg + '/100' : '—';
+  $('course-progress').style.width = Math.round((passed / total) * 100) + '%';
+}
+
+function renderModules() {
+  $('modules-list').innerHTML = APP.modules.map((m, i) => {
+    const passed  = m.status === 'passed';
+    const locked  = m.status === 'locked';
+    const flagged = m.status === 'flagged';
+    const pending = m.pendingApproval;
+    const clickable = !locked && !passed;
+
+    let iconClass, icon;
+    if (passed)        { iconClass = 'ic-done';    icon = 'ti-check'; }
+    else if (pending)  { iconClass = 'ic-pending'; icon = 'ti-clock'; }
+    else if (flagged)  { iconClass = 'ic-flagged'; icon = 'ti-alert-triangle'; }
+    else if (locked)   { iconClass = 'ic-lock';    icon = 'ti-lock'; }
+    else               { iconClass = 'ic-active';  icon = 'ti-microphone'; }
+
+    const rowClass = 'module-item'
+      + (passed ? ' passed' : locked ? ' locked' : flagged ? ' flagged' : ' active-mod')
+      + (clickable ? ' clickable' : '');
+
+    const badge = passed
+      ? `<span class="badge badge-green" style="margin-left:auto"><i class="ti ti-check"></i> Passed — ${m.bestScore}/100</span>`
+      : pending
+      ? `<span class="badge badge-amber" style="margin-left:auto"><i class="ti ti-clock"></i> Pending approval</span>`
+      : flagged
+      ? `<span class="badge badge-red" style="margin-left:auto"><i class="ti ti-alert-triangle"></i> Flagged</span>`
+      : locked
+      ? `<span style="margin-left:auto;font-size:12px;color:var(--text-3)">Locked</span>`
+      : `<span class="badge badge-purple" style="margin-left:auto">Attempt ${m.attempts + 1}</span>`;
+
+    const sub = locked   ? 'Complete previous module first'
+      : flagged  ? 'Flagged — awaiting teacher guidance'
+      : pending  ? 'Awaiting teacher approval'
+      : passed   ? m.attempts + ' attempt' + (m.attempts !== 1 ? 's' : '')
+      : m.attempts > 0 ? m.attempts + ' attempt' + (m.attempts !== 1 ? 's' : '') + ' — try again'
+      : 'Ready to attempt';
+
+    return `<div class="${rowClass}" ${clickable ? `onclick="openExam(${i})"` : ''}>
+      <div class="mod-icon ${iconClass}"><i class="ti ${icon}"></i></div>
+      <div style="flex:1;min-width:0"><div class="mod-title">${i + 1}. ${m.title}</div><div class="mod-sub">${sub}</div></div>
+      ${badge}
+    </div>`;
+  }).join('');
+}
+
+function promptAddModule() {
+  const t = prompt('Module title:');
+  if (t && t.trim()) {
+    APP.modules.push({ title: t.trim(), status: 'locked', attempts: 0, scores: [], bestScore: 0, pendingApproval: false });
+    renderModules(); updateStats();
+  }
+}
+
+/* ─────────────────────────────────────────
+   EXAM
+───────────────────────────────────────── */
+async function openExam(idx) {
+  APP.currentModIdx = idx;
+  APP.currentTranscript = '';
+  resetExamUI(); showExam();
+
+  const mod = APP.modules[idx];
+  $('exam-badge').textContent = 'Module ' + (idx + 1) + ': ' + mod.title;
+  $('exam-attempt-info').textContent = 'Attempt ' + (mod.attempts + 1) + (APP.maxAttempts > 0 ? ' of ' + APP.maxAttempts : '');
+
+  $('exam-input-area').style.display = 'none';
+  $('exam-loading').style.display = 'block';
+  $('loading-msg').textContent = 'Generating your question...';
+
+  const q = await generateQuestion(mod.title, APP.courseNotes, mod.attempts + 1);
+  APP.currentQuestion = q;
+  $('exam-question').textContent = q;
+  $('exam-loading').style.display = 'none';
+  $('exam-input-area').style.display = 'block';
+}
+
+function resetExamUI() {
+  selectMode('voice');
+  $('transcript-box').style.display = 'none';
+  $('transcript-text').textContent = '';
+  APP.currentTranscript = '';
+  resetAudioUI(); resetVideoUI();
+  $('typed-answer').value = '';
+  $('word-count').textContent = '0';
+  $('exam-result').style.display = 'none';
+  $('exam-input-area').style.display = 'block';
+  $('exam-loading').style.display = 'none';
+  $('submit-btn').disabled = false;
+}
+
+function exitExam() { stopAllMedia(); renderCourseScreen(); showCourse(); }
+
+/* ─────────────────────────────────────────
+   INPUT MODE
+───────────────────────────────────────── */
+function selectMode(m) {
+  APP.inputMode = m;
+  ['voice', 'video', 'type'].forEach(id => {
+    $('mode-' + id).className = 'mode-btn' + (m === id ? ' selected' : '');
+  });
+  $('panel-voice').style.display = m === 'voice' ? 'block' : 'none';
+  $('panel-video').style.display = m === 'video' ? 'block' : 'none';
+  $('panel-type').style.display  = m === 'type'  ? 'block' : 'none';
+  if (m !== 'type') $('transcript-box').style.display = 'none';
+}
+
+/* ─────────────────────────────────────────
+   AUDIO RECORDING
+───────────────────────────────────────── */
+function startAudioRec() {
+  navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+    APP.audioChunks = []; APP.recSeconds = 0; APP.speechTranscript = '';
+
+    // Real-time transcription via Web Speech API (free, browser-native)
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SR) {
+      APP.recognition = new SR();
+      APP.recognition.continuous = true;
+      APP.recognition.interimResults = false;
+      APP.recognition.lang = 'en-US';
+      APP.recognition.onresult = e => {
+        for (let i = e.resultIndex; i < e.results.length; i++) {
+          if (e.results[i].isFinal) APP.speechTranscript += e.results[i][0].transcript + ' ';
+        }
+      };
+      APP.recognition.onerror = ev => console.warn('Speech recognition:', ev.error);
+      APP.recognition.start();
+    }
+
+    APP.mediaRecorder = new MediaRecorder(stream);
+    APP.mediaRecorder.ondataavailable = e => { if (e.data.size > 0) APP.audioChunks.push(e.data); };
+    APP.mediaRecorder.onstop = () => { stream.getTracks().forEach(t => t.stop()); onAudioDone(); };
+    APP.mediaRecorder.start();
+    $('voice-idle').style.display   = 'none';
+    $('voice-active').style.display = 'flex';
+    $('voice-done').style.display   = 'none';
+    APP.recInterval = setInterval(() => { APP.recSeconds++; $('audio-timer').textContent = fmtTime(APP.recSeconds); }, 1000);
+  }).catch(() => {
+    alert('Microphone access denied. Please allow mic access or switch to "Type it" mode.');
+    selectMode('type');
+  });
+}
+
+function stopAudioRec() {
+  if (APP.recognition) { try { APP.recognition.stop(); } catch {} APP.recognition = null; }
+  if (APP.mediaRecorder && APP.mediaRecorder.state !== 'inactive') APP.mediaRecorder.stop();
+  clearInterval(APP.recInterval);
+  $('voice-active').style.display = 'none';
+  $('voice-done').style.display   = 'flex';
+  $('audio-done-label').textContent = 'Recorded ' + fmtTime(APP.recSeconds);
+}
+
+function onAudioDone() {
+  const transcript = APP.speechTranscript.trim();
+  if (transcript.length > 15) {
+    // Real transcript captured via Web Speech API
+    APP.currentTranscript = transcript;
+    $('transcript-text').textContent = `"${transcript}"`;
+  } else {
+    // Fallback: Speech API unavailable or caught nothing (e.g. Firefox, no mic permissions for SR)
+    APP.currentTranscript = `[Voice recording: ${fmtTime(APP.recSeconds)}] The student gave a ${fmtTime(APP.recSeconds)} spoken explanation of "${APP.modules[APP.currentModIdx].title}". No live transcript was captured. Grade based on topic, question, and any uploaded course notes.`;
+    $('transcript-text').textContent = `Voice recorded (${fmtTime(APP.recSeconds)}). Submit to evaluate.`;
+  }
+  $('transcript-box').style.display = 'block';
+}
+
+function reRecordAudio() { resetAudioUI(); APP.currentTranscript = ''; $('transcript-box').style.display = 'none'; }
+function resetAudioUI() {
+  $('voice-idle').style.display   = 'flex';
+  $('voice-active').style.display = 'none';
+  $('voice-done').style.display   = 'none';
+  clearInterval(APP.recInterval); APP.recSeconds = 0;
+}
+
+/* ─────────────────────────────────────────
+   VIDEO RECORDING
+───────────────────────────────────────── */
+function startVideoRec() {
+  navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+    APP.videoStream = stream; APP.videoChunks = []; APP.vidSeconds = 0;
+    APP.speechTranscript = '';
+    $('vid-el').srcObject = stream;
+
+    // Real-time transcription via Web Speech API
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SR) {
+      APP.recognition = new SR();
+      APP.recognition.continuous = true;
+      APP.recognition.interimResults = false;
+      APP.recognition.lang = 'en-US';
+      APP.recognition.onresult = e => {
+        for (let i = e.resultIndex; i < e.results.length; i++) {
+          if (e.results[i].isFinal) APP.speechTranscript += e.results[i][0].transcript + ' ';
+        }
+      };
+      APP.recognition.onerror = ev => console.warn('Speech recognition:', ev.error);
+      APP.recognition.start();
+    }
+
+    APP.videoRecorder = new MediaRecorder(stream);
+    APP.videoRecorder.ondataavailable = e => { if (e.data.size > 0) APP.videoChunks.push(e.data); };
+    APP.videoRecorder.onstop = () => { stream.getTracks().forEach(t => t.stop()); onVideoDone(); };
+    APP.videoRecorder.start();
+    $('video-idle').style.display   = 'none';
+    $('video-active').style.display = 'flex';
+    $('video-done').style.display   = 'none';
+    APP.recInterval = setInterval(() => { APP.vidSeconds++; $('video-timer').textContent = fmtTime(APP.vidSeconds); }, 1000);
+  }).catch(() => {
+    alert('Camera/mic access denied. Switching to voice-only mode.');
+    selectMode('voice');
+  });
+}
+
+function stopVideoRec() {
+  if (APP.recognition) { try { APP.recognition.stop(); } catch {} APP.recognition = null; }
+  if (APP.videoRecorder && APP.videoRecorder.state !== 'inactive') APP.videoRecorder.stop();
+  clearInterval(APP.recInterval);
+  $('video-active').style.display = 'none';
+  $('video-done').style.display   = 'flex';
+  $('video-done-label').textContent = 'Video recorded (' + fmtTime(APP.vidSeconds) + ')';
+}
+
+function onVideoDone() {
+  const transcript = APP.speechTranscript.trim();
+  if (transcript.length > 15) {
+    APP.currentTranscript = transcript;
+    $('transcript-text').textContent = `"${transcript}"`;
+  } else {
+    APP.currentTranscript = `[Video recording: ${fmtTime(APP.vidSeconds)}] The student gave a ${fmtTime(APP.vidSeconds)} video explanation of "${APP.modules[APP.currentModIdx].title}". No live transcript was captured. Grade based on topic, question, and any uploaded course notes.`;
+    $('transcript-text').textContent = `Video recorded (${fmtTime(APP.vidSeconds)}). Submit to evaluate.`;
+  }
+  $('transcript-box').style.display = 'block';
+}
+
+function reRecordVideo() { resetVideoUI(); APP.currentTranscript = ''; $('transcript-box').style.display = 'none'; }
+function resetVideoUI() {
+  $('video-idle').style.display   = 'flex';
+  $('video-active').style.display = 'none';
+  $('video-done').style.display   = 'none';
+  clearInterval(APP.recInterval); APP.vidSeconds = 0;
+}
+
+function stopAllMedia() {
+  if (APP.mediaRecorder && APP.mediaRecorder.state !== 'inactive') APP.mediaRecorder.stop();
+  if (APP.videoRecorder && APP.videoRecorder.state !== 'inactive') APP.videoRecorder.stop();
+  if (APP.videoStream) APP.videoStream.getTracks().forEach(t => t.stop());
+  clearInterval(APP.recInterval);
+}
+
+/* ─────────────────────────────────────────
+   TYPED INPUT
+───────────────────────────────────────── */
+$('typed-answer').addEventListener('input', function () {
+  const words = this.value.trim() ? this.value.trim().split(/\s+/).length : 0;
+  $('word-count').textContent = words;
+  APP.currentTranscript = this.value.trim();
+});
+
+/* ─────────────────────────────────────────
+   SUBMIT
+───────────────────────────────────────── */
+async function submitAnswer() {
+  const content = APP.inputMode === 'type'
+    ? $('typed-answer').value.trim()
+    : APP.currentTranscript;
+
+  if (!content || content.trim().length < 8) {
+    alert('Please record your explanation or write at least a sentence before submitting.');
+    return;
+  }
+
+  $('exam-input-area').style.display = 'none';
+  $('exam-loading').style.display = 'block';
+  $('loading-msg').textContent = 'Gemini is evaluating your explanation...';
+
+  const mod = APP.modules[APP.currentModIdx];
+  const fb  = await evaluateAnswer(mod.title, APP.currentQuestion, content, APP.inputMode !== 'type');
+
+  mod.attempts++;
+  mod.scores.push(fb.score);
+  mod.bestScore = Math.max(mod.bestScore, fb.score);
+
+  $('exam-loading').style.display = 'none';
+  renderResult(fb, mod);
+  updateStats();
+  renderModules();
+}
+
+/* ─────────────────────────────────────────
+   RENDER RESULT
+───────────────────────────────────────── */
+function renderResult(fb, mod) {
+  const passed = fb.score >= APP.threshold;
+  $('result-ring').className = 'score-ring ' + (passed ? 'pass' : 'fail');
+  $('result-score').textContent   = fb.score;
+  $('result-title').textContent   = fb.title   || (passed ? 'Good explanation' : 'Not quite yet');
+  $('result-summary').textContent = fb.summary || '';
+
+  $('result-pips').innerHTML = mod.scores.map((s, i) =>
+    `<span class="pip ${s >= APP.threshold ? 'pass' : 'fail'}" title="Attempt ${i + 1}: ${s}/100"></span>`
+  ).join('') + `<span style="font-size:12px;color:var(--text-2)">Best: ${mod.bestScore}/100</span>`;
+
+  setFb('fb-strengths', '<i class="ti ti-check"></i> What you got right', fb.strengths);
+  setFb('fb-gaps',      '<i class="ti ti-alert-triangle"></i> Gaps to close', fb.gaps);
+
+  const te = $('fb-tip');
+  if (fb.tip) { te.innerHTML = `<div class="fb-title"><i class="ti ti-bulb"></i> Coach tip</div><p>${fb.tip}</p>`; te.style.display = 'block'; }
+  else te.style.display = 'none';
+
+  const oe = $('fb-oral');
+  if (fb.oral_note && APP.inputMode !== 'type') { oe.innerHTML = `<div class="fb-title"><i class="ti ti-microphone"></i> Delivery note</div><p>${fb.oral_note}</p>`; oe.style.display = 'block'; }
+  else oe.style.display = 'none';
+
+  const gateEl = $('gate-area'), actEl = $('result-actions');
+  actEl.innerHTML = '';
+
+  const nextIdx = APP.currentModIdx + 1;
+  const attLeft = APP.maxAttempts > 0 ? APP.maxAttempts - mod.attempts : Infinity;
+
+  if (passed) {
+    const borderline = APP.teacherApproval && fb.score < APP.threshold + 15;
+    if (borderline) {
+      mod.pendingApproval = true;
+      gateEl.innerHTML = `<div class="gate pending"><i class="ti ti-clock"></i><div class="gate-title">Passed — awaiting teacher review</div><div class="gate-desc">Your score of ${fb.score}/100 meets the threshold. Your teacher will confirm before the next module unlocks.</div></div>`;
+    } else {
+      mod.status = 'passed'; mod.pendingApproval = false;
+      if (nextIdx < APP.modules.length && APP.modules[nextIdx].status === 'locked')
+        APP.modules[nextIdx].status = 'available';
+      gateEl.innerHTML = `<div class="gate unlock"><i class="ti ti-lock-open"></i><div class="gate-title">Module passed — next module unlocked!</div><div class="gate-desc">Score: ${fb.score}/100 — above the ${APP.threshold}/100 threshold${nextIdx >= APP.modules.length ? '. You have completed all modules!' : '.'}.</div></div>`;
+      if (nextIdx < APP.modules.length)
+        actEl.innerHTML += `<button class="btn btn-primary" onclick="openExam(${nextIdx})">Next module <i class="ti ti-arrow-right"></i></button>`;
+    }
+  } else if (attLeft > 0) {
+    gateEl.innerHTML = `<div class="gate locked"><i class="ti ti-lock"></i><div class="gate-title">Not yet — keep practising</div><div class="gate-desc">Score ${fb.score}/100 — need ${APP.threshold}/100 to pass. ${attLeft === Infinity ? 'Unlimited retries.' : attLeft + ' attempt' + (attLeft !== 1 ? 's' : '') + ' remaining.'} Review the gaps above and try again.</div></div>`;
+    actEl.innerHTML = `<button class="btn btn-primary" onclick="retryExam()"><i class="ti ti-refresh"></i> Try again</button>`;
+  } else {
+    mod.status = 'flagged';
+    gateEl.innerHTML = `<div class="gate flagged"><i class="ti ti-alert-triangle"></i><div class="gate-title">Flagged for teacher review</div><div class="gate-desc">You have used all ${APP.maxAttempts} attempts. Your teacher will provide guidance on how to proceed.</div></div>`;
+  }
+
+  actEl.innerHTML += `<button class="btn btn-ghost" onclick="exitExam()"><i class="ti ti-layout-list"></i> Back to course</button>`;
+  $('exam-result').style.display = 'block';
+  renderModules();
+}
+
+function setFb(elId, titleHtml, items) {
+  const el = $(elId);
+  if (items && items.length) {
+    const cls = elId.includes('strengths') ? 'strengths' : 'gaps';
+    el.className = `fb ${cls}`;
+    el.innerHTML = `<div class="fb-title">${titleHtml}</div><ul>${items.map(s => `<li>${s}</li>`).join('')}</ul>`;
+    el.style.display = 'block';
+  } else { el.style.display = 'none'; }
+}
+
+function retryExam() { openExam(APP.currentModIdx); }
+
+/* ─────────────────────────────────────────
+   GEMINI: GENERATE QUESTION
+───────────────────────────────────────── */
+async function generateQuestion(topic, notes, attemptNum) {
+  const depthMap = {
+    1: 'a foundational question asking the student to explain the core concept in their own words',
+    2: 'a deeper question probing mechanisms, causes, or connections between ideas',
+    3: 'a challenging question asking the student to apply, compare, or critically evaluate',
+  };
+  const depth = depthMap[Math.min(attemptNum, 3)];
+  const sys = `You are setting an oral exam question for a student revising for their exams. Generate ${depth} about the given topic. The student must explain this as if teaching a peer — without notes. Return ONLY the question as one clear sentence. No preamble, no numbering, no explanation.`;
+  try {
+    const raw = await callGemini(sys, `Topic: ${topic}\nCourse context: ${notes || '(none)'}`);
+    return raw.trim().replace(/^["']|["']$/g, '');
+  } catch (e) {
+    console.error('Question generation failed:', e);
+    return `Explain ${topic} in your own words, as if teaching it to a classmate who has never heard of it before.`;
+  }
+}
+
+/* ─────────────────────────────────────────
+   GEMINI: EVALUATE ANSWER
+───────────────────────────────────────── */
+async function evaluateAnswer(topic, question, content, isAV) {
+  const hasNotes = APP.courseNotes && APP.courseNotes.trim().length > 20;
+
+  // When notes are uploaded, grade against them directly.
+  // When no notes, use Google Search grounding to verify factual accuracy.
+  const notesBlock = hasNotes
+    ? `\n\nREFERENCE MATERIAL (student's uploaded course notes/syllabus — use as primary accuracy benchmark):\n"""\n${APP.courseNotes.slice(0, 3000)}\n"""\nCheck the student's explanation specifically against this material. Deduct points for anything missing or contradicted by it.`
+    : '';
+
+  const sys = `You are an expert oral examiner assessing a student's explanation of a concept during exam revision. The student was asked to explain a topic as if teaching a peer — without consulting notes.
+
+Evaluate for: conceptual accuracy, depth of understanding, clarity of explanation, and whether someone with no prior knowledge would genuinely learn from this answer.${notesBlock}
+
+Score from 0 to 100. Be an honest, demanding examiner — vague or surface-level answers must not score highly. A blank, placeholder, or one-sentence answer scores below 20. Be specific and constructive in feedback.
+
+Pass threshold: ${APP.threshold}/100.
+
+Respond ONLY with valid JSON — no markdown fences, no preamble, nothing else:
+{
+  "score": 78,
+  "title": "Short verdict phrase (5 words max)",
+  "summary": "One sentence overall assessment.",
+  "strengths": ["specific strength 1", "specific strength 2"],
+  "gaps": ["specific gap 1", "specific gap 2"],
+  "tip": "One targeted coaching tip for the next attempt.",
+  "oral_note": "One sentence on delivery or communication style (for voice/video only; set to null for written answers)"
+}`;
+
+  const userMsg = `Topic: ${topic}
+Question asked: ${question}
+Student's answer: ${content}
+Answer type: ${isAV ? 'spoken (transcript of voice/video recording)' : 'written text'}`;
+
+  try {
+    // With notes: use JSON mode (forces valid JSON, most reliable).
+    // Without notes: use Google Search grounding so Gemini verifies facts against real sources.
+    // Note: JSON mode and Search grounding cannot be combined — they are mutually exclusive.
+    const useSearch = !hasNotes;
+    const raw = await callGemini(sys, userMsg, {
+      temperature: 0.2,
+      jsonMode: !useSearch,
+      tools: useSearch ? [{ google_search: {} }] : undefined,
+    });
+    return extractJSON(raw);
+  } catch (e) {
+    console.error('Evaluation error:', e);
+    return {
+      score: 0,
+      title: 'Evaluation failed',
+      summary: 'Could not retrieve AI feedback. Check your Gemini API key and try again.',
+      strengths: [],
+      gaps: ['Feedback unavailable — ' + (e.message || 'unknown error')],
+      tip: 'Verify your API key at aistudio.google.com, then resubmit.',
+      oral_note: null,
+    };
+  }
+}
+
+/* ─────────────────────────────────────────
+   INIT
+───────────────────────────────────────── */
+loadKey();
+</script>
+</body>
+</html>
